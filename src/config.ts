@@ -45,9 +45,17 @@ export function loadConfig(env: RuntimeBindings = {}): AppConfig {
   };
 }
 
+function isLoopbackHost(host: string): boolean {
+  const normalized = host.toLowerCase().replace(/\.$/, "");
+  if (normalized === "localhost" || normalized.endsWith(".localhost") || normalized === "[::1]") return true;
+  const parts = normalized.split(".");
+  return parts.length === 4 && parts[0] === "127" && parts.every((part) => /^\d{1,3}$/.test(part) && Number(part) <= 255);
+}
+
 export function isHostAllowed(host: string, patterns: string[]): boolean {
   if (patterns.length === 0) return true;
   const normalized = host.toLowerCase().replace(/\.$/, "");
+  if (isLoopbackHost(normalized)) return true;
   return patterns.some((pattern) => {
     if (pattern.startsWith("*.")) {
       const suffix = pattern.slice(1);

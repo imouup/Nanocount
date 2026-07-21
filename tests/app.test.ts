@@ -60,6 +60,11 @@ test("normalizes and validates counter targets", () => {
   });
   assert.equal(isHostAllowed("blog.example.com", bindings.ALLOWED_HOSTS!.split(",")), true);
   assert.equal(isHostAllowed("notexample.com", bindings.ALLOWED_HOSTS!.split(",")), false);
+  assert.equal(isHostAllowed("localhost", ["example.com"]), true);
+  assert.equal(isHostAllowed("theme.localhost", ["example.com"]), true);
+  assert.equal(isHostAllowed("127.24.0.1", ["example.com"]), true);
+  assert.equal(isHostAllowed("[::1]", ["example.com"]), true);
+  assert.equal(isHostAllowed("192.168.1.1", ["example.com"]), false);
   assert.throws(() => normalizeHost("bad host"));
   assert.throws(() => normalizePath("//evil.example/path"));
 });
@@ -82,6 +87,13 @@ test("serves the dashboard and embeddable script with security headers", async (
 });
 
 test("rejects forged tracking origins and disallowed hosts", async () => {
+  const loopback = await app.request(
+    "https://counter.test/api/v1/hit",
+    { method: "POST", headers: { Origin: "http://127.0.0.1:4000" }, body: JSON.stringify({ host: "127.0.0.1", path: "/theme-preview" }) },
+    bindings,
+  );
+  assert.equal(loopback.status, 201);
+
   const forged = await app.request(
     "https://counter.test/api/v1/hit",
     { method: "POST", headers: { Origin: "https://evil.test" }, body: JSON.stringify({ host: "example.com", path: "/" }) },

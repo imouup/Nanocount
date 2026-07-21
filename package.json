@@ -41,7 +41,7 @@
         "description": "后台登录密码，请使用至少 12 位的随机字符串。"
       },
       "ALLOWED_HOSTS": {
-        "description": "允许统计的域名，多个域名用英文逗号分隔，例如 example.com,*.example.com。"
+        "description": "允许统计的域名，多个域名用英文逗号分隔，例如 example.com,*.example.com；本地回环地址默认允许。"
       }
     }
   }

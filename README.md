@@ -85,7 +85,7 @@ https://你的-nanocount-地址/admin
 | 变量 | 是否必填 | 怎么填写 |
 | --- | --- | --- |
 | `ADMIN_PASSWORD` | 是 | 后台登录密码，至少 12 位，建议使用密码管理器生成随机密码 |
-| `ALLOWED_HOSTS` | 是 | 需要统计的网站域名，例如 `example.com`；多个域名用英文逗号分隔，子域名可写 `*.example.com` |
+| `ALLOWED_HOSTS` | 是 | 需要统计的网站域名，例如 `example.com`；多个域名用英文逗号分隔，子域名可写 `*.example.com`；回环地址默认允许 |
 | `PUBLIC_API_TOKEN` | 否 | 设置后，读取访问量 API 必须携带此 Token；公开网页需要直接读取时请留空 |
 | `SESSION_TTL_HOURS` | 否 | 后台登录有效时间，默认 `12` 小时 |
 | `ALLOW_NO_ORIGIN` | 否 | 默认 `false`；只有服务端主动上报访问量时才建议设为 `true` |
@@ -107,6 +107,8 @@ ALLOWED_HOSTS=example.com,*.example.com
 # 统计多个不同网站
 ALLOWED_HOSTS=example.com,example.net,blog.example.org
 ```
+
+`localhost`、`*.localhost`、`127.0.0.0/8` 和 IPv6 `[::1]` 等回环地址始终允许，无需加入 `ALLOWED_HOSTS`，可直接用于本地主题测试。
 
 不要把真实密码或 Token 提交到 Git 仓库。
 
@@ -313,7 +315,7 @@ Content-Type: text/plain
 }
 ```
 
-请求中的 `host` 必须与浏览器的 `Origin` 域名一致，并且必须包含在 `ALLOWED_HOSTS` 中。
+请求中的 `host` 必须与浏览器的 `Origin` 域名一致，并且必须包含在 `ALLOWED_HOSTS` 中；本地回环地址默认允许。
 
 成功响应：
 
