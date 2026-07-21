@@ -454,3 +454,5 @@ npm run cf:dev
 ## License
 
 [MIT](LICENSE)
+
+界面图标来自 [Font Awesome Free](https://fontawesome.com/)，图标部分按 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 使用。

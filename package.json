@@ -21,6 +21,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "7.3.1",
     "@hono/node-server": "^1.19.7",
     "@libsql/client": "^0.17.0",
     "hono": "^4.10.4"

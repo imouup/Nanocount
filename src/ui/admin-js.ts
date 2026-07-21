@@ -1,6 +1,17 @@
 export const ADMIN_JS = String.raw`(() => {
   "use strict";
   const $ = (selector) => document.querySelector(selector);
+  const createIcon = (name) => {
+    const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    icon.setAttribute("class", "fa-icon");
+    icon.setAttribute("aria-hidden", "true");
+    icon.setAttribute("focusable", "false");
+    use.setAttribute("href", "#fa-" + name);
+    icon.append(use);
+    return icon;
+  };
+  const setIcon = (node, name) => node.querySelector("use")?.setAttribute("href", "#fa-" + name);
   const loginView = $("#login-view");
   const dashboardView = $("#dashboard-view");
   const pagesBody = $("#pages-body");
@@ -78,7 +89,7 @@ export const ADMIN_JS = String.raw`(() => {
     cell.className = "page-cell";
     const icon = document.createElement("span");
     icon.className = "page-cell-icon";
-    icon.textContent = "↗";
+    icon.append(createIcon("external"));
     const labels = document.createElement("div");
     const path = document.createElement("strong");
     path.textContent = page.path;
@@ -99,7 +110,7 @@ export const ADMIN_JS = String.raw`(() => {
     const edit = document.createElement("button");
     edit.type = "button";
     edit.className = "edit-button";
-    edit.textContent = "修改";
+    edit.append(createIcon("edit"), document.createTextNode("编辑"));
     edit.setAttribute("aria-label", "修改 " + page.host + page.path + " 的访问量");
     edit.addEventListener("click", () => openEdit(page));
     actionColumn.append(edit);
@@ -162,8 +173,10 @@ export const ADMIN_JS = String.raw`(() => {
     const input = $("#password");
     const visible = input.type === "text";
     input.type = visible ? "password" : "text";
-    $("#toggle-password").textContent = visible ? "显示" : "隐藏";
-    $("#toggle-password").setAttribute("aria-label", visible ? "显示密码" : "隐藏密码");
+    const toggle = $("#toggle-password");
+    setIcon(toggle, visible ? "eye" : "eyeSlash");
+    toggle.setAttribute("aria-label", visible ? "显示密码" : "隐藏密码");
+    toggle.setAttribute("title", visible ? "显示密码" : "隐藏密码");
   });
 
   $("#logout-button").addEventListener("click", async () => {
