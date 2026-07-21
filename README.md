@@ -2,6 +2,8 @@
 
 Nanocount 是一个轻量的网站访问量计数器。只需一键部署然后在网站中加入一行 JavaScript ，就可以记录每个页面的访问次数，并在后台查看或修改数据。
 
+[项目网站](https://imouup.github.io/Nanocount/) · [一键部署](https://imouup.github.io/Nanocount/#deploy) · [API 文档](#api文档)
+
 它不会保存访客 IP、Cookie、User-Agent 或身份信息。你可以部署到 Vercel、Cloudflare、普通 Linux 服务器或 Docker。
 
 ## 添加计数器到网站
