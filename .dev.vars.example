@@ -1,0 +1,3 @@
+# Cloudflare 一键部署会要求填写这两个值。
+ADMIN_PASSWORD=
+ALLOWED_HOSTS=

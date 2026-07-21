@@ -1,0 +1,13 @@
+.git
+.github
+.agents
+.codex
+.env
+.env.*
+.dev.vars
+node_modules
+dist
+data
+tests
+*.log
+*.png

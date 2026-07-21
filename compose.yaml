@@ -1,0 +1,20 @@
+services:
+  nanocount:
+    build:
+      context: .
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-bookworm-slim}
+    container_name: nanocount
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-example.com}
+      PUBLIC_API_TOKEN: ${PUBLIC_API_TOKEN:-}
+      TRUST_PROXY: ${TRUST_PROXY:-false}
+    volumes:
+      - nanocount-data:/app/data
+
+volumes:
+  nanocount-data:

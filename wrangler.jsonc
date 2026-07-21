@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nanocount",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-21",
+  "minify": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nanocount",
+      "database_id": "replace-with-your-d1-database-id",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "SESSION_TTL_HOURS": "12",
+    "ALLOW_NO_ORIGIN": "false"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
