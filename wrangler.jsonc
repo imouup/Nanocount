@@ -8,6 +8,7 @@
   "d1_databases": [
     {
       "binding": "DB",
+      "database_name": "nanocount",
       "migrations_dir": "migrations"
     }
   ],
