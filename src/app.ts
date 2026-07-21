@@ -19,6 +19,7 @@ import { runtimeStore } from "./storage/runtime";
 import type { CounterStore, RuntimeBindings } from "./types";
 import { ADMIN_CSS } from "./ui/admin-css";
 import { ADMIN_HTML } from "./ui/admin-html";
+import { ADMIN_FAVICON } from "./ui/admin-icons";
 import { ADMIN_JS } from "./ui/admin-js";
 import { InputError, normalizeHost, normalizePath, parseNonNegativeInteger, parseTarget } from "./validation";
 
@@ -160,6 +161,11 @@ export function createApp(options: { store?: CounterStore } = {}) {
   });
 
   app.get("/", (c) => c.redirect("/admin", 302));
+  app.get("/favicon.svg", (c) => {
+    c.header("Content-Type", "image/svg+xml; charset=utf-8");
+    c.header("Cache-Control", "public, max-age=86400");
+    return c.body(ADMIN_FAVICON);
+  });
   app.get("/health", async (c) => {
     await storeFor(c).initialize();
     return ok(c, { status: "ok", service: "nanocount", time: new Date().toISOString() });

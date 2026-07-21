@@ -70,6 +70,11 @@ test("serves the dashboard and embeddable script with security headers", async (
   assert.match(await dashboard.text(), /Nanocount/);
   assert.match(dashboard.headers.get("content-security-policy") ?? "", /default-src 'none'/);
 
+  const favicon = await app.request("https://counter.test/favicon.svg", {}, bindings);
+  assert.equal(favicon.status, 200);
+  assert.match(favicon.headers.get("content-type") ?? "", /image\/svg\+xml/);
+  assert.match(await favicon.text(), /<svg[^>]+viewBox="0 0 512 512"/);
+
   const script = await app.request("https://counter.test/nano.js", {}, bindings);
   assert.equal(script.status, 200);
   assert.equal(script.headers.get("access-control-allow-origin"), "*");

@@ -12,6 +12,35 @@ export const ADMIN_JS = String.raw`(() => {
     return icon;
   };
   const setIcon = (node, name) => node.querySelector("use")?.setAttribute("href", "#fa-" + name);
+  const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("nanocount-theme"); } catch { savedTheme = null; }
+
+  function applyTheme(theme, persist = false) {
+    const dark = theme === "dark";
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0e0a0d" : "#ffffff");
+    document.querySelectorAll(".theme-toggle").forEach((button) => {
+      const label = dark ? "切换到浅色模式" : "切换到黑夜模式";
+      setIcon(button, dark ? "sun" : "moon");
+      button.setAttribute("aria-label", label);
+      button.setAttribute("title", label);
+      button.setAttribute("aria-pressed", String(dark));
+    });
+    if (persist) {
+      savedTheme = dark ? "dark" : "light";
+      try { localStorage.setItem("nanocount-theme", savedTheme); } catch {}
+    }
+  }
+
+  applyTheme(savedTheme === "dark" || savedTheme === "light" ? savedTheme : (themeMedia.matches ? "dark" : "light"));
+  document.querySelectorAll(".theme-toggle").forEach((button) => {
+    button.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true));
+  });
+  themeMedia.addEventListener?.("change", (event) => {
+    if (!savedTheme) applyTheme(event.matches ? "dark" : "light");
+  });
+
   const loginView = $("#login-view");
   const dashboardView = $("#dashboard-view");
   const pagesBody = $("#pages-body");

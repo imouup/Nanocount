@@ -6,14 +6,16 @@ export const ADMIN_HTML = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#6f315f">
+  <meta name="theme-color" content="#ffffff">
   <title>Nanocount · 轻量访问计数</title>
-  <link rel="stylesheet" href="/admin/assets/app.css?v=2">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/admin/assets/app.css?v=5">
 </head>
 <body>
   ${ADMIN_ICON_SPRITE}
 
   <main id="login-view" class="login-view is-hidden" aria-labelledby="login-title">
+    <button class="icon-button theme-toggle login-theme-toggle" type="button" aria-label="切换到黑夜模式" title="切换到黑夜模式">${adminIcon("moon")}</button>
     <section class="login-card">
       <header class="login-heading">
         <span class="brand-mark" aria-hidden="true">${adminIcon("chart")}</span>
@@ -45,6 +47,7 @@ export const ADMIN_HTML = `<!doctype html>
       </a>
       <div class="topbar-actions">
         <span class="status-dot"><i></i>服务正常</span>
+        <button class="icon-button theme-toggle" type="button" aria-label="切换到黑夜模式" title="切换到黑夜模式">${adminIcon("moon")}</button>
         <button id="refresh-button" class="icon-button" type="button" aria-label="刷新数据" title="刷新数据">${adminIcon("refresh")}</button>
         <button id="logout-button" class="button button-quiet" type="button">${adminIcon("logout")}<span>退出</span></button>
       </div>
@@ -148,6 +151,6 @@ export const ADMIN_HTML = `<!doctype html>
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="/admin/assets/app.js?v=2" defer></script>
+  <script src="/admin/assets/app.js?v=5" defer></script>
 </body>
 </html>`;
