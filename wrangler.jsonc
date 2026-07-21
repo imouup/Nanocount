@@ -4,11 +4,10 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-07-21",
   "minify": true,
+  "keep_vars": true,
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "nanocount",
-      "database_id": "replace-with-your-d1-database-id",
       "migrations_dir": "migrations"
     }
   ],

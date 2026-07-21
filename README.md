@@ -138,6 +138,15 @@ ALLOWED_HOSTS=example.com,example.net,blog.example.org
 4. 点击部署。D1 建表迁移会自动执行。
 5. 部署完成后，打开 Worker 地址并在后面加 `/admin` 登录。
 
+如果直接从自己的 GitHub 仓库创建 Worker，请在 **Settings → Builds** 中确认：
+
+```text
+Build command: npm run build
+Deploy command: npm run deploy
+```
+
+仓库只声明名为 `DB` 的 D1 绑定，不保存任何账户专属的数据库 ID。首次部署时 Wrangler 会创建并绑定 D1；以后从同一 Worker 部署时会继续使用已经关联的数据库。`npm run deploy` 还会在发布代码前自动执行尚未运行的数据库迁移。
+
 如果一键部署不可用，可以手动部署：
 
 ```bash
@@ -145,10 +154,9 @@ git clone https://github.com/imouup/Nanocount.git
 cd Nanocount
 npm ci
 npx wrangler login
-npx wrangler d1 create nanocount
 ```
 
-把命令返回的 `database_id` 填入 `wrangler.jsonc`，然后设置两个变量：
+设置两个变量：
 
 ```bash
 npx wrangler secret put ADMIN_PASSWORD
