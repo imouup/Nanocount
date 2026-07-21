@@ -1,6 +1,6 @@
 # Nanocount
 
-Nanocount 是一个轻量、隐私友好的网站访问计数器。把一行 JavaScript 放进网站，就可以记录每个页面的访问次数，并在带密码保护的后台查看或修改数据。
+Nanocount 是一个轻量的网站访问量计数器。只需一键部署然后在网站中加入一行 JavaScript ，就可以记录每个页面的访问次数，并在后台查看或修改数据。
 
 它不会保存访客 IP、Cookie、User-Agent 或身份信息。你可以部署到 Vercel、Cloudflare、普通 Linux 服务器或 Docker。
 
@@ -207,7 +207,7 @@ TRUST_PROXY=true
 
 需要已经安装并启动 Docker Desktop 或 Docker Engine。
 
-如果项目已经发布 Release，可以直接使用构建好的 GHCR 镜像：
+可以直接使用构建好的 GHCR 镜像：
 
 ```bash
 docker run -d \
@@ -220,7 +220,7 @@ docker run -d \
   ghcr.io/imouup/nanocount:latest
 ```
 
-如果还没有 Release，或者希望自己构建镜像，可以使用 Docker Compose：
+* 如果希望自己构建镜像，可以使用 Docker Compose：
 
 ```bash
 git clone https://github.com/imouup/Nanocount.git
@@ -241,11 +241,8 @@ ALLOWED_HOSTS=example.com,*.example.com
 docker compose up -d --build
 ```
 
-如果 Docker 镜像源无法拉取 Node.js 基础镜像，可在 `.env` 中加入下面一行后重试：
 
-```dotenv
-NODE_IMAGE=public.ecr.aws/docker/library/node:22-bookworm-slim
-```
+
 
 然后打开：
 
@@ -448,26 +445,10 @@ npm run cf:dev
 
 **发布 Docker 镜像**
 
-仓库中的 `.github/workflows/release-docker.yml` 会在 GitHub Release 发布后自动构建 `linux/amd64` 和 `linux/arm64` 镜像。
+仓库中的 `.github/workflows/release-docker.yml` 会在 GitHub Release 发布后自动构建 `linux/amd64` 和 `linux/arm64` 镜像，并发布到ghcr和doxker hub。
 
-GHCR 不需要额外账号或密码，工作流会使用 GitHub 自动提供的 `GITHUB_TOKEN`，镜像地址为：
 
-```text
-ghcr.io/imouup/nanocount
-```
 
-第一次发布后，请打开 GitHub 个人主页或组织主页的 **Packages → nanocount → Package settings → Change visibility**，把镜像设为 **Public**，这样普通用户才能直接拉取。请注意，GitHub 不允许公开后的包重新改回私有。
-
-如果还要同时发布到 Docker Hub，需要先在 Docker Hub 创建名为 `nanocount` 的仓库，然后在 GitHub 仓库的 **Settings → Secrets and variables → Actions** 中添加：
-
-| Secret | 内容 |
-| --- | --- |
-| `DOCKERHUB_USERNAME` | Docker Hub 用户名 |
-| `DOCKERHUB_TOKEN` | Docker Hub 的 Access Token，不要使用账号密码 |
-
-没有配置这两个 Secrets 时，工作流仍会正常发布到 GHCR，只会跳过 Docker Hub。只配置其中一个会让工作流明确报错，避免误以为镜像已经发布到 Docker Hub。
-
-正式版本建议使用 `v1.2.3` 这样的 Release Tag。发布后会生成 `1.2.3`、`1.2`、`1` 和 `latest` 标签；预发布版本不会覆盖 `latest`。也可以在 GitHub Actions 页面手动运行工作流，默认生成 `edge` 标签。
 
 ## License
 
