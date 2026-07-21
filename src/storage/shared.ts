@@ -59,8 +59,8 @@ export function listQuery(options: {
     args.push(options.host);
   }
   if (options.search) {
-    clauses.push("path LIKE ? ESCAPE '\\'");
-    args.push(`%${options.search.replace(/[\\%_]/g, "\\$&")}%`);
+    clauses.push("INSTR(LOWER(path), LOWER(?)) > 0");
+    args.push(options.search);
   }
   const columns = { views: "views", path: "path", updated: "updated_at" } as const;
   const direction = options.order === "asc" ? "ASC" : "DESC";

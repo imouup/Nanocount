@@ -171,6 +171,50 @@ test("uses a signed session and protects count mutations with same-origin checks
   assert.equal(update.status, 200);
   assert.equal((await json(update)).data?.views, 42);
 
+  const searchablePath = "/2026/06/23/fall-in-love-with-you-until-the-end-of-life";
+  const searchable = await app.request(
+    "https://counter.test/admin/api/pages",
+    {
+      method: "PATCH",
+      headers: { Cookie: cookie, Origin: "https://counter.test", "Content-Type": "application/json" },
+      body: JSON.stringify({ host: "example.com", path: searchablePath, views: 7 }),
+    },
+    bindings,
+  );
+  assert.equal(searchable.status, 200);
+
+  const longSearch = await app.request(
+    `https://counter.test/admin/api/pages?page=1&pageSize=10&search=${encodeURIComponent(searchablePath.slice(1))}`,
+    { headers: { Cookie: cookie } },
+    bindings,
+  );
+  const longSearchPayload = await json(longSearch);
+  assert.equal(longSearch.status, 200);
+  assert.equal(longSearchPayload.data?.total, 1);
+  assert.equal((longSearchPayload.data?.items as Array<{ path: string }>)[0]?.path, searchablePath);
+
+  const literalPath = "/Special%_Page";
+  const literal = await app.request(
+    "https://counter.test/admin/api/pages",
+    {
+      method: "PATCH",
+      headers: { Cookie: cookie, Origin: "https://counter.test", "Content-Type": "application/json" },
+      body: JSON.stringify({ host: "example.com", path: literalPath, views: 3 }),
+    },
+    bindings,
+  );
+  assert.equal(literal.status, 200);
+
+  const literalSearch = await app.request(
+    `https://counter.test/admin/api/pages?page=1&pageSize=10&search=${encodeURIComponent("special%_page")}`,
+    { headers: { Cookie: cookie } },
+    bindings,
+  );
+  const literalSearchPayload = await json(literalSearch);
+  assert.equal(literalSearch.status, 200);
+  assert.equal(literalSearchPayload.data?.total, 1);
+  assert.equal((literalSearchPayload.data?.items as Array<{ path: string }>)[0]?.path, literalPath);
+
   const pages = await app.request(
     "https://counter.test/admin/api/pages?host=example.com&page=1&pageSize=10",
     { headers: { Cookie: cookie } },
@@ -178,6 +222,6 @@ test("uses a signed session and protects count mutations with same-origin checks
   );
   const payload = await json(pages);
   assert.equal(pages.status, 200);
-  assert.equal(payload.data?.total, 1);
+  assert.equal(payload.data?.total, 3);
   assert.equal((payload.data?.items as Array<{ views: number }>)[0]?.views, 42);
 });

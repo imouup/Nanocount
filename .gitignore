@@ -9,4 +9,4 @@ dist/
 data/*.db*
 *.log
 .DS_Store
-
+/scripts/
